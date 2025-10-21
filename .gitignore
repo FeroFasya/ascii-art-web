@@ -1,0 +1,12 @@
+# Abaikan file output (hasil)
+hasil_*.jpg
+hasil_*.txt
+
+# Abaikan file input tes
+gambar.jpg
+
+# Abaikan file tes/cache
+coba_baca.py
+tempCodeRunnerFile.py
+__pycache__/
+*.pyc
