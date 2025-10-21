@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Upload Gambar untuk ASCII Art</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@300;400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+  <h1 class="pixelify-sans-main pixel-weight-700">ASCII Art Generator</h1>
+      <p class="lead muted">Unggah foto, lalu server akan mengonversi menjadi seni ASCII. Cocok untuk eksperimen dan fun.</p>
+
+      <form method="post" enctype="multipart/form-data" action="/upload">
+        <div id="formAlert" class="alert hidden">Pilih file gambar terlebih dahulu sebelum men-submit.</div>
+        <div class="form-row">
+          <label class="file-label">
+            Pilih gambar
+            <input type="file" name="file" id="imgInput" accept="image/*">
+          </label>
+
+          <button type="submit" class="btn primary">Upload & Convert</button>
+
+          <div class="right">
+            <div class="muted">Preview</div>
+            <img id="preview" class="preview hidden" src="" alt="Preview">
+          </div>
+        </div>
+      </form>
+      <footer>Tip: Gunakan gambar close-up dengan kontras bagus untuk hasil ASCII yang rapi.</footer>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('imgInput');
+    const preview = document.getElementById('preview');
+    const form = document.querySelector('form');
+    const formAlert = document.getElementById('formAlert');
+
+    // Cegah submit kalau belum pilih file
+    form && form.addEventListener('submit', (e)=>{
+      if(!input || !input.files || input.files.length === 0){
+        e.preventDefault();
+        formAlert.classList.remove('hidden');
+        return false;
+      }
+    });
+
+    // Sembunyikan alert saat user memilih file
+    input && input.addEventListener('change', ()=>{
+      formAlert.classList.add('hidden');
+    });
+    input && input.addEventListener('change', (e)=>{
+      const f = e.target.files && e.target.files[0];
+      if(!f){ preview.style.display='none'; preview.src=''; return }
+      const url = URL.createObjectURL(f);
+      preview.src = url; preview.style.display='block';
+    });
+  </script>
+</body>
+</html>

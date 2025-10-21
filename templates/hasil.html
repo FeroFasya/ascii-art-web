@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="id">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Hasil ASCII Art</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@300;400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<div class="container">
+		<div class="card">
+			<h1 class="pixelify-sans-main pixel-weight-400">Hasil:</h1>
+
+			<div class="toolbar">
+				<button id="copyBtn" class="btn">Salin ke clipboard</button>
+				<button id="downloadBtn" class="btn">Download .txt</button>
+				<a class="btn" href="/">Upload Lagi</a>
+			</div>
+
+			<pre id="asciiArea">{{ hasil_dari_python }}</pre>
+
+			<footer>File hasil dapat disalin atau diunduh sebagai .txt untuk dibagikan.</footer>
+		</div>
+	</div>
+
+	<script>
+		const copyBtn = document.getElementById('copyBtn');
+		const downloadBtn = document.getElementById('downloadBtn');
+		const asciiArea = document.getElementById('asciiArea');
+
+		copyBtn && copyBtn.addEventListener('click', async ()=>{
+			try{
+				await navigator.clipboard.writeText(asciiArea.innerText);
+				copyBtn.innerText = 'Tersalin!';
+				setTimeout(()=>copyBtn.innerText = 'Salin ke clipboard',1500);
+			}catch(e){
+				alert('Gagal menyalin: ' + e);
+			}
+		});
+
+		downloadBtn && downloadBtn.addEventListener('click', ()=>{
+			const blob = new Blob([asciiArea.innerText], {type:'text/plain;charset=utf-8'});
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url; a.download = 'ascii_art.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+		});
+	</script>
+</body>
+</html>
